@@ -56,23 +56,27 @@ body {
     font-size: 6rem;
 }
 
-.game > p {
+.game > button {
+    font-size: 5rem;
+    font-weight: 100;
+    border: none;
     width: 6rem;
     height: 6rem;
     line-height: 0.7em;
-    border-right: 5px solid grey;
-    border-bottom: 5px solid grey;
+    border-right: 8px solid grey;
+    border-bottom: 8px solid grey;
     padding: 1rem;
+    background-color: transparent;
 }
 
-.game>p:nth-child(3),
-.game>p:nth-child(6),
-.game>p:nth-child(9) {
+.game>button:nth-child(3),
+.game>button:nth-child(6),
+.game>button:nth-child(9) {
     border-right:none;
 }
 
-.game>p:nth-child(7),
-.game>p:nth-child(8), 
-.game>p:nth-child(9) {
+.game>button:nth-child(7),
+.game>button:nth-child(8), 
+.game>button:nth-child(9) {
     border-bottom: none;
 }
