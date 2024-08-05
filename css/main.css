@@ -67,6 +67,7 @@ body {
     border-bottom: 8px solid grey;
     padding: 1rem;
     background-color: transparent;
+    cursor: pointer;
 }
 
 .game>button:nth-child(3),

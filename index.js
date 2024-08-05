@@ -3,9 +3,8 @@ class Game {
         this.buttonDOM = document.querySelectorAll('.game > button');
         this.playAgainDOM = document.querySelector('.playAgain');
 
-        this.beginGame();
-        this.playAgain();
         this.isGameDataNotEmpty();
+        this.beginGame();
         this.gameEvents();
 
     }
@@ -20,7 +19,6 @@ class Game {
 
     beginGame() {
         let gameData = JSON.parse(localStorage.getItem('gameInfo'));
-        console.log(gameData);
 
         if (this.isGameDataNotEmpty()) {
             for (let i = 0; i < gameData.length; i++) {
@@ -30,12 +28,12 @@ class Game {
             for (const button of this.buttonDOM) {
                 button.textContent = '';
             }
-            gameData = [];
         }
     }
 
     gameEvents() {
         let gameData = JSON.parse(localStorage.getItem('gameInfo'));
+
         let count = null;
         if (!this.isGameDataNotEmpty()) {
             count = 0;
@@ -43,6 +41,7 @@ class Game {
         } else {
             count = (gameData[gameData.length - 1]).count === 0 ? 1 : 0;
         }
+
 
         for (let i = 0; i < this.buttonDOM.length; i++) {
             this.buttonDOM[i].addEventListener('click', () => {
@@ -71,14 +70,9 @@ class Game {
             });
         }
 
-    }
-
-    playAgain() {
         this.playAgainDOM.addEventListener('click', () => {
-            const gameData = [];
-            localStorage.setItem('gameInfo', JSON.stringify(gameData));
-            console.log(gameData);
-
+            gameData = [];
+            localStorage.setItem('gameInfo', JSON.stringify(gameData))
             this.beginGame();
         });
     }
@@ -86,6 +80,3 @@ class Game {
 
 
 new Game();
-
-
-// [{"move":"O","count":"0","index":"0"},{"move":"X","count":"1","index":"1"},{"move":"O","count":"0","index":"4"},{"move":"X","count":"1","index":"3"},{"move":"O","count":"0","index":"2"},{"move":"X","count":"1","index":"5"}]
