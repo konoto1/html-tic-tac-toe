@@ -70,6 +70,10 @@ body {
     cursor: pointer;
 }
 
+.game > button.won {
+    background-color: green;
+}
+
 .game>button:nth-child(3),
 .game>button:nth-child(6),
 .game>button:nth-child(9) {
