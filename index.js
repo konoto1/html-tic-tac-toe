@@ -5,6 +5,7 @@ class Game {
         this.resultDOM = document.querySelector('.result');
         this.scoreODOM = document.getElementById('scoreO');
         this.scoreXDOM = document.getElementById('scoreX');
+        this.state = false;
 
         this.isGameDataNotEmpty();
         this.beginGame();
@@ -12,7 +13,7 @@ class Game {
 
     winCheck() {
         let btn = []
-        let gameScore = { scoreO: 0, scoreX: 0, result: '' };
+        let gameScore = { scoreO: 0, scoreX: 0, result: '', state: false };
         if (JSON.parse(localStorage.getItem('gameScore')) !== null) {
             gameScore = JSON.parse(localStorage.getItem('gameScore'));
         }
@@ -34,9 +35,10 @@ class Game {
             this.resultDOM.textContent = 'Player "O" won!';
             gameScore.scoreO++;
             gameScore.result = 'Player "O" won!';
+            gameScore.state = true;
             this.scoreODOM.textContent = gameScore.scoreO;
             localStorage.setItem('gameScore', JSON.stringify(gameScore));
-            return true;
+            this.state = true;
         }
 
         if (btn[0] + btn[1] + btn[2] === 'XXX'
@@ -51,11 +53,11 @@ class Game {
             this.resultDOM.textContent = 'Player "X" won!';
             gameScore.scoreX++;
             gameScore.result = 'Player "X" won!';
+            gameScore.state = true;
             this.scoreXDOM.textContent = gameScore.scoreX;
             localStorage.setItem('gameScore', JSON.stringify(gameScore));
-            return true;
+            this.state = true;
         }
-        return false;
     }
 
     isGameDataNotEmpty() {
@@ -73,10 +75,12 @@ class Game {
             this.scoreODOM.textContent = 0;
             this.scoreXDOM.textContent = 0;
             this.resultDOM.textContent = '';
+            this.state = false;
         } else {
             this.scoreODOM.textContent = gameScore.scoreO;
             this.scoreXDOM.textContent = gameScore.scoreX;
             this.resultDOM.textContent = gameScore.result;
+            this.state = gameScore.state;
         }
 
         if (this.isGameDataNotEmpty()) {
@@ -97,10 +101,23 @@ class Game {
         this.playAgainDOM.addEventListener('click', () => {
             gameData = [];
             localStorage.setItem('gameInfo', JSON.stringify(gameData));
-            this.resultDOM.textContent = '';
+            let gameScore = JSON.parse(localStorage.getItem('gameScore'))
+            if (gameScore === null) {
+                this.state = false;
+            } else {
+                gameScore.state = false;
+                gameScore.result = '';
+                localStorage.setItem('gameScore', JSON.stringify(gameScore));
+            }
+
             count = 0;
+            this.state = false;
             this.beginGame();
         });
+
+        if (this.state) {
+            return;
+        }
 
         if (!this.isGameDataNotEmpty()) {
             count = 0;
@@ -109,9 +126,8 @@ class Game {
             count = (gameData[gameData.length - 1]).count === 0 ? 1 : 0;
         }
 
-
         for (let i = 0; i < this.buttonDOM.length; i++) {
-            this.buttonDOM[i].addEventListener('click', () => {
+            this.buttonDOM[i].addEventListener('click', events => {
                 const isEmpty = this.buttonDOM[i].textContent.length === 0;
 
                 if (isEmpty && count === 0) {
@@ -124,6 +140,7 @@ class Game {
                     count = 1;
                     localStorage.setItem('gameInfo', JSON.stringify(gameData));
                     this.winCheck();
+
                 } else if (isEmpty && count !== 0) {
                     this.buttonDOM[i].textContent = 'X';
                     count = 1;
@@ -135,6 +152,12 @@ class Game {
                     count = 0;
                     localStorage.setItem('gameInfo', JSON.stringify(gameData));
                     this.winCheck();
+                }
+                if (this.state) {
+                    for (const button of this.buttonDOM) {
+                        let btnText = button.textContent;
+                        btnText !== '' ? button.textContent = btnText : button.textContent = ' ';
+                    }
                 }
             });
         }
