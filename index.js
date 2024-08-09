@@ -1,17 +1,22 @@
 class Game {
     constructor() {
         this.buttonDOM = document.querySelectorAll('.game > button');
+        this.resetScoreDOM = document.querySelector('.resetScore');
         this.playAgainDOM = document.querySelector('.playAgain');
         this.resultDOM = document.querySelector('.result');
         this.scoreODOM = document.getElementById('scoreO');
         this.scoreXDOM = document.getElementById('scoreX');
-        this.state = false;
 
+
+        this.state = false;
         this.isGameDataNotEmpty();
         this.beginGame();
+        this.resetScore();
     }
 
+
     winCheck() {
+
         let btn = []
         let gameScore = { scoreO: 0, scoreX: 0, result: '', state: false };
         if (JSON.parse(localStorage.getItem('gameScore')) !== null) {
@@ -39,6 +44,7 @@ class Game {
             this.scoreODOM.textContent = gameScore.scoreO;
             localStorage.setItem('gameScore', JSON.stringify(gameScore));
             this.state = true;
+            return;
         }
 
         if (btn[0] + btn[1] + btn[2] === 'XXX'
@@ -57,6 +63,14 @@ class Game {
             this.scoreXDOM.textContent = gameScore.scoreX;
             localStorage.setItem('gameScore', JSON.stringify(gameScore));
             this.state = true;
+            return;
+        }
+
+        if (!btn.includes('')) {
+            this.resultDOM.textContent = 'Game draw!';
+            gameScore.result = 'Game draw!';
+            localStorage.setItem('gameScore', JSON.stringify(gameScore));
+            return;
         }
     }
 
@@ -161,6 +175,16 @@ class Game {
                 }
             });
         }
+    }
+
+    resetScore() {
+        this.resetScoreDOM.addEventListener('click', () => {
+            let gameScore = { scoreO: 0, scoreX: 0, result: '', state: false };
+            let gameData = [];
+            localStorage.setItem('gameInfo', JSON.stringify(gameData));
+            localStorage.setItem('gameScore', JSON.stringify(gameScore));
+            this.beginGame();
+        })
     }
 }
 
